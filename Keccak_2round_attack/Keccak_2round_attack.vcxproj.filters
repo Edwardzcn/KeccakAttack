@@ -15,25 +15,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Source\attack.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="attack.cpp">
+    <ClCompile Include="Source\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="verify.cpp">
+    <ClCompile Include="Source\verify.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="attack.h">
+    <ClInclude Include="Source\attack.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="common.h">
+    <ClInclude Include="Source\common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="verify.h">
+    <ClInclude Include="Source\verify.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\input_hash_value.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="Data\output_preimage.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\preimage">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

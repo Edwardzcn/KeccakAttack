@@ -19,14 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="attack.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="verify.cpp" />
+    <ClCompile Include="Source\attack.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\verify.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="attack.h" />
-    <ClInclude Include="common.h" />
-    <ClInclude Include="verify.h" />
+    <ClInclude Include="Source\attack.h" />
+    <ClInclude Include="Source\common.h" />
+    <ClInclude Include="Source\verify.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\input_hash_value.txt" />
+    <Text Include="Data\output_preimage.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\preimage" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
