@@ -21,11 +21,13 @@
   <ItemGroup>
     <ClCompile Include="Source\attack.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\operation.cpp" />
     <ClCompile Include="Source\verify.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\attack.h" />
     <ClInclude Include="Source\common.h" />
+    <ClInclude Include="Source\operation.h" />
     <ClInclude Include="Source\verify.h" />
   </ItemGroup>
   <ItemGroup>

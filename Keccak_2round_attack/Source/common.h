@@ -13,10 +13,24 @@
 #define se second
 
 #define DEBUG
+//#define reducedRound 3
+#define KeccakReferences
+#define maxNrRounds 24
+#define nrLanes 25
+#define index(x, y) (((x)%5)+5*((y)%5))
+#define KeccakP1600_stateSizeInBytes    200
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define ROL64(a, offset) ((offset != 0) ? ((((tKeccakLane)a) << offset) ^ (((tKeccakLane)a) >> (64-offset))) : a)
 
 typedef unsigned char UINT8;
 typedef unsigned long long UINT64;
 typedef UINT64 tKeccakLane;
 
 NTL_CLIENT
+
+
+
+
+//static tKeccakLane KeccakRoundConstants[maxNrRounds];
+//static unsigned int KeccakRhoOffsets[nrLanes];
 

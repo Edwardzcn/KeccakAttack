@@ -2,7 +2,17 @@
 #include "common.h"
 using namespace std;
 
+
+
+tKeccakLane KeccakRoundConstants[maxNrRounds];
+unsigned int KeccakRhoOffsets[nrLanes];
+
+
 /*******  initialization functions ************/
+
+
+
+
 
 
 void KeccakP1600_Initialize(void* state)
@@ -47,6 +57,21 @@ void KeccakP1600_InitializeRoundConstants(void)
 	}
 }
 
+void GetRoundConstants(tKeccakLane* rc)
+{
+	UINT8 LFSRstate = 0x01;
+	unsigned int i, j, bitPosition;
+
+	for (i = 0; i < maxNrRounds; i++) {
+		rc[i] = 0;
+		for (j = 0; j < 7; j++) {
+			bitPosition = (1 << j) - 1; /* 2^j-1 */
+			if (LFSR86540(&LFSRstate))
+				rc[i] ^= (tKeccakLane)1 << bitPosition;
+		}
+	}
+}
+
 void KeccakP1600_InitializeRhoOffsets(void)
 {
 	unsigned int x, y, t, newX, newY;
@@ -63,67 +88,6 @@ void KeccakP1600_InitializeRhoOffsets(void)
 	}
 }
 
-
-
-
-/******* 5 operation functions ************/
-
-
-#define ROL64(a, offset) ((offset != 0) ? ((((tKeccakLane)a) << offset) ^ (((tKeccakLane)a) >> (64-offset))) : a)
-
-static void theta(tKeccakLane* A)
-{
-	unsigned int x, y;
-	tKeccakLane C[5], D[5];
-
-	for (x = 0; x < 5; x++) {
-		C[x] = 0;
-		for (y = 0; y < 5; y++)
-			C[x] ^= A[index(x, y)];
-	}
-	for (x = 0; x < 5; x++)
-		D[x] = ROL64(C[(x + 1) % 5], 1) ^ C[(x + 4) % 5];
-	for (x = 0; x < 5; x++)
-		for (y = 0; y < 5; y++)
-			A[index(x, y)] ^= D[x];
-}
-
-static void rho(tKeccakLane* A)
-{
-	unsigned int x, y;
-
-	for (x = 0; x < 5; x++) for (y = 0; y < 5; y++)
-		A[index(x, y)] = ROL64(A[index(x, y)], KeccakRhoOffsets[index(x, y)]);
-}
-
-static void pi(tKeccakLane* A)
-{
-	unsigned int x, y;
-	tKeccakLane tempA[25];
-
-	for (x = 0; x < 5; x++) for (y = 0; y < 5; y++)
-		tempA[index(x, y)] = A[index(x, y)];
-	for (x = 0; x < 5; x++) for (y = 0; y < 5; y++)
-		A[index(0 * x + 1 * y, 2 * x + 3 * y)] = tempA[index(x, y)];
-}
-
-static void chi(tKeccakLane* A)
-{
-	unsigned int x, y;
-	tKeccakLane C[5];
-
-	for (y = 0; y < 5; y++) {
-		for (x = 0; x < 5; x++)
-			C[x] = A[index(x, y)] ^ ((~A[index(x + 1, y)]) & A[index(x + 2, y)]);
-		for (x = 0; x < 5; x++)
-			A[index(x, y)] = C[x];
-	}
-}
-
-static void iota(tKeccakLane* A, unsigned int indexRound)
-{
-	A[index(0, 0)] ^= KeccakRoundConstants[indexRound];
-}
 
 
 
@@ -339,19 +303,19 @@ void score(UINT64* hash, int outputLen, int reducedRound) {
 	}
 }
 
-UINT64 stringtoull(string str_64) {
-	// 2进制字符串 转UINT64
-	return std::strtoull(str_64.c_str(), NULL, 2);
-}
+//tKeccakLane stringtoull(string str_64) {
+//	// 2进制字符串 转UINT64
+//	return std::strtoull(str_64.c_str(), NULL, 2);
+//}
 
 
 void test_preimage(string input_path) {
-#define		MESSAGE_BITLEN (1088*2-64)
+#define		MESSAGE_BITLEN (1088*1)
 	//#define  MESSAGE_BITLEN (1088-64)
 
 	UINT64 message_block[MESSAGE_BITLEN / 64] = { 0 };
 	unsigned int inputBitLen1 = MESSAGE_BITLEN;
-	int reducedRound = 1;
+	int reducedRound = 2;
 
 	ifstream infile;
 	infile.open(input_path);
@@ -374,6 +338,8 @@ void test_preimage(string input_path) {
 
 	unsigned int outputBitLen = 256;
 	UINT64* hash_1 = (UINT64*)calloc(outputBitLen / 64 + 1, sizeof(UINT64));
+	inputBitLen1 -= 2;
+	printf("inputBitlen=%d\n", inputBitLen1);
 
 	Keccak(reducedRound, 1088, 512, message_block, inputBitLen1, hash_1, outputBitLen, 0);
 
@@ -384,34 +350,6 @@ void test_preimage(string input_path) {
 	score(hash_1, outputBitLen, reducedRound);
 
 }
-
-//
-//int main(int argc, const char* argv[]) {
-//
-//	// example1
-//	UINT64 message_text[7] = { 0x00,0x00,0x00,0x00,0x00,0x01,0x00 };
-//	unsigned int inputBitLen1 = 447;
-//	int reducedRound = 1;
-//
-//	// example2
-//	UINT64 message_1[5] = { 0x01,0x8000000000000000,0x00,0x00,0x00 };
-//	unsigned int inputBitLen1 = 319;
-//	int reducedRound = 1;
-//
-//	unsigned int outputBitLen = 256;
-//	UINT64* hash_1 = (UINT64*)calloc(outputBitLen / 64 + 1, sizeof(UINT64));
-//
-//	Keccak(reducedRound, 1088, 512, message_1, inputBitLen1, hash_1, outputBitLen, 0);
-//
-//	printf("M_1:\n");
-//	printHash(message_1, inputBitLen1, hash_1, outputBitLen);
-//
-//	//compute score
-//	score(hash_1, outputBitLen, reducedRound);
-//
-//	return 0;
-//}
-
 
 
 

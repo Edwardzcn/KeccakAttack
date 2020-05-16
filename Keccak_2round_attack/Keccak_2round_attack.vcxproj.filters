@@ -24,6 +24,9 @@
     <ClCompile Include="Source\verify.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Source\operation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\attack.h">
@@ -33,6 +36,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Source\verify.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\operation.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
