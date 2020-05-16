@@ -78,6 +78,8 @@ void iota(tKeccakLane* A, unsigned int indexRound)
 void iota_inverse(tKeccakLane* A, unsigned int indexRound) {
 	A[index(0, 0)] ^= KeccakRoundConstants[indexRound];
 }
+
+
 #include <iostream>
 
 void iota_inverse(vector<vec_GF2>& A, unsigned int indexRound, tKeccakLane* rc) {

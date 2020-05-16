@@ -117,24 +117,8 @@ void get_preimage(string input_path, string output_path)
 
 
 
-	//h[0][0] = h[0][0] + 1; // iota inverse
 
-	//vec_GF2 hh[5];
-	//vector<vec_GF2> hh;
-	//for (i = 0; i < hash_lane_num; ++i) {
-	//	hh.push_back(vec_GF2());
-	//	hh[i].SetLength(64);
-	//}
 
-	//for (i = 0; i < 64; ++i) // chi inverse
-	//{
-	//	// get h'
-	//	hh[0][i] = (h[0][i] + (h[1][i] + 1) * (h[2][i] + (h[3][i] + 1) * h[4][i]));
-	//	hh[1][i] = (h[1][i] + (h[2][i] + 1) * (h[3][i] + (h[4][i] + 1) * h[0][i]));
-	//	hh[2][i] = (h[2][i] + (h[3][i] + 1) * (h[4][i] + (h[0][i] + 1) * h[1][i]));
-	//	hh[3][i] = (h[3][i] + (h[4][i] + 1) * (h[0][i] + (h[1][i] + 1) * h[2][i]));
-	//	hh[4][i] = (h[4][i] + (h[0][i] + 1) * (h[1][i] + (h[2][i] + 1) * h[3][i]));
-	//}
 
 
 	// 作者为了省事  没有再另创建数组保存/iota^-1的运算结果
@@ -151,11 +135,31 @@ void get_preimage(string input_path, string output_path)
 	print1600state(rc);
 #endif // DEBUG
 	vector<vec_GF2> hiota(h);
-	debug_print_lane(hiota, 'i', 64, 4);
+	debug_print_lane(hiota, 'i', 64, 5);
 	iota_inverse(hiota, 1, rc);
 #ifdef DEBUG
-	debug_print_lane(hiota, 'i', 64, 4);
+	debug_print_lane(hiota, 'i', 64, 5);
 #endif // DEBUG
+
+
+	vector<vec_GF2> hh;
+	for (i = 0; i < hash_lane_num; ++i) {
+		hh.push_back(vec_GF2());
+		hh[i].SetLength(64);
+		//		random(h[i], 64);	//change this  随机数赋值
+	}
+	for (i = 0; i < 64; ++i) // chi inverse
+	{
+		// get hh'
+		hh[0][i] = (hiota[0][i] + (hiota[1][i] + 1) * (hiota[2][i] + (hiota[3][i] + 1) * hiota[4][i]));
+		hh[1][i] = (hiota[1][i] + (hiota[2][i] + 1) * (hiota[3][i] + (hiota[4][i] + 1) * hiota[0][i]));
+		hh[2][i] = (hiota[2][i] + (hiota[3][i] + 1) * (hiota[4][i] + (hiota[0][i] + 1) * hiota[1][i]));
+		hh[3][i] = (hiota[3][i] + (hiota[4][i] + 1) * (hiota[0][i] + (hiota[1][i] + 1) * hiota[2][i]));
+		hh[4][i] = (hiota[4][i] + (hiota[0][i] + 1) * (hiota[1][i] + (hiota[2][i] + 1) * hiota[3][i]));
+	}
+
+
+	debug_print_lane(hh, 'c', 64, 5);
 
 
 
@@ -175,23 +179,18 @@ void get_preimage(string input_path, string output_path)
 	for (i = 0; i < 64; ++i) {
 
 		// 注意求反当作常数
-		b[(0 * 64) + i] = hiota[0][i] + RC[i] + 1;
-		b[(1 * 64) + i] = hiota[1][(i + 20) % 64] + RC[i];
-		b[(2 * 64) + i] = hiota[2][(i + 21) % 64] + 1;
-		b[(3 * 64) + i] = hiota[3][(i + 43) % 64];
-		b[(4 * 64) + i] = hiota[4][(i + 50) % 64] + RC[(i + 1) % 64] + 1;
+		b[(0 * 64) + i] = hh[0][i] + RC[i] + 1;
+		b[(1 * 64) + i] = hh[1][(i + 20) % 64] + RC[i];
+		b[(2 * 64) + i] = hh[2][(i + 21) % 64] + 1;
+		b[(3 * 64) + i] = hh[3][(i + 43) % 64];
+		b[(4 * 64) + i] = hh[4][(i + 50) % 64] + RC[(i + 1) % 64] + 1;
 		b[(5 * 64) + i] = 0;
 		b[(6 * 64) + i] = 0;
 		//b[(1 * 64) + i] = [2][i] + d[3][(i + 34) % 64] + e[6][(i + 43) % 64] + d[3][(i + 6) % 64] + e[3][(i + 42) % 64] + e[8][(i + 42) % 64];
-
 		//b[(2 * 64) + i] = hh[3][i] + e[7][(i + 21) % 64] + d[3][(i + 11) % 64];
-
 		//b[(3 * 64) + i] = hh[6][i] + d[3][(i + 48) % 64] + e[8][(i + 20) % 64] + d[3][(i + 47) % 64] + RC[(i + 19) % 64] + e[3][(i + 20) % 64];
-
 		//b[(4 * 64) + i] = hh[7][i] + d[3][(i + 58) % 64] + d[3][(i + 57) % 64] + e[6][(i + 2) % 64];
-
 		//b[(5 * 64) + i] = 1 + RC[(i + 45) % 64] + d[3][(i + 9) % 64] + e[7][(i + 44) % 64];
-
 	}
 
 
@@ -203,10 +202,11 @@ void get_preimage(string input_path, string output_path)
 	for (i = 0; i < 64; ++i) {
 		//First equation
 		A[0 + i][(0 * 64) + (i + 0) % 64] = 1; //x_0(0)
-		A[0 + i][(6 * 64) + ((i + 0) % 64)] = 1; //x_6(0)
+		A[0 + i][(6 * 64) + ((i + 43) % 64)] = 1; //x_6(43)
+		A[0 + i][(1 * 64) + (i + 36) % 64] = 1; //x_1(36)
 		A[0 + i][(2 * 64) + ((i + 4) % 64)] = 1; //x_2(4)
 		A[0 + i][(5 * 64) + ((i + 7) % 64)] = 1; //x_5(7)
-		A[0 + i][(2 * 64) + ((i + 37) % 64)] = 1; //x_1(37)
+		A[0 + i][(1 * 64) + ((i + 37) % 64)] = 1; //x_1(37)
 		A[0 + i][(3 * 64) + ((i + 42) % 64)] = 1; //x_3(42)
 
 		//Second equation
