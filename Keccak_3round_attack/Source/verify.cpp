@@ -316,7 +316,6 @@ void test_preimage(string input_path) {
 	UINT64 message_block[MESSAGE_BITLEN / 64] = { 0 };
 	unsigned int inputBitLen1 = MESSAGE_BITLEN;
 	int reducedRound = 2;
-	//int reducedRound = 3;
 
 	ifstream infile;
 	infile.open(input_path);

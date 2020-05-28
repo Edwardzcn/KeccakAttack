@@ -19,29 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\attack.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\operation.cpp" />
-    <ClCompile Include="Source\verify.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\attack.h" />
     <ClInclude Include="Source\common.h" />
     <ClInclude Include="Source\operation.h" />
     <ClInclude Include="Source\verify.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Data\input_hash_value.txt" />
-    <Text Include="Data\output_preimage.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\preimage" />
+    <ClCompile Include="Source\attack.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\operation.cpp" />
+    <ClCompile Include="Source\verify.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{7C806E26-06F2-4452-90A9-F09CC7D377CF}</ProjectGuid>
+    <ProjectGuid>{F966C30C-6EAB-4B42-BD68-774A66DC6F04}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Keccak2roundattack</RootNamespace>
+    <RootNamespace>Keccak3roundattack</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -107,16 +100,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Daily\PersonalStudy\Major\Cryptology\WinNTL-11_4_3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Daily\Project\NTL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>NTL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
