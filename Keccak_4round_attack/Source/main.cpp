@@ -13,7 +13,8 @@ int main() {
 	//get_preimage(input_path, output_path);
 	test_preimage_ull(output_path);
 	//independent_bits_engine<default_random_engine, 64, unsigned long long int> engine;
-	//rep(i, 0, 2000000) {
+	//engine.discard(5000000);
+	//rep(i, 0, 5000000) {
 	//	test_preimage_random(0,engine);
 	//}
 }

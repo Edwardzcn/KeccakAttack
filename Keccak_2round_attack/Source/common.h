@@ -12,8 +12,8 @@
 #define fi first
 #define se second
 
-#define DEBUG
-//#define reducedRound 3
+// #define DEBUG
+// #define reducedRound 3
 #define KeccakReferences
 #define maxNrRounds 24
 #define nrLanes 25

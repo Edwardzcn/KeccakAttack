@@ -1,4 +1,6 @@
 ﻿#include "attack.h"
+#include <windows.h>
+
 
 NTL_CLIENT
 
@@ -89,8 +91,10 @@ void get_preimage(string input_path, string output_path)
 		h[i].SetLength(64);
 		//		random(h[i], 64);	//change this  随机数赋值
 	}
-
+#ifdef DEBUG
 	cout << "The filename to be opened is : " << input_path << endl;
+#endif // DEBUG
+
 
 
 	ifstream infile;
@@ -124,10 +128,11 @@ void get_preimage(string input_path, string output_path)
 	// 作者为了省事  没有再另创建数组保存/iota^-1的运算结果
 	//h[0][0] = h[0][0] + 1; //to get back the hash value
 
-
+#ifdef DEBUG
 	cout << "****************HASH VALUE**************\n";
 	cout << "******* Maybe with the padding line*****\n";
 	debug_print_lane(h, 'h', 64, 4);
+#endif // DEBUG
 
 	tKeccakLane rc[25];
 	GetRoundConstants(rc);
@@ -135,7 +140,9 @@ void get_preimage(string input_path, string output_path)
 	print1600state(rc);
 #endif // DEBUG
 	vector<vec_GF2> hiota(h);
+#ifdef DEBUG
 	debug_print_lane(hiota, 'i', 64, 5);
+#endif // DEBUG
 	iota_inverse(hiota, 1, rc);
 #ifdef DEBUG
 	debug_print_lane(hiota, 'i', 64, 5);
@@ -158,8 +165,10 @@ void get_preimage(string input_path, string output_path)
 		hh[4][i] = (hiota[4][i] + (hiota[0][i] + 1) * (hiota[1][i] + (hiota[2][i] + 1) * hiota[3][i]));
 	}
 
-
+#ifdef DEBUG
 	debug_print_lane(hh, 'c', 64, 5);
+#endif // DEBUG
+
 
 
 
@@ -186,11 +195,6 @@ void get_preimage(string input_path, string output_path)
 		b[(4 * 64) + i] = hh[4][(64 + i - 50) % 64] + RC[(64 + i - 1) % 64] + 1;
 		b[(5 * 64) + i] = 0;
 		b[(6 * 64) + i] = 0;
-		//b[(1 * 64) + i] = [2][i] + d[3][(i + 34) % 64] + e[6][(i + 43) % 64] + d[3][(i + 6) % 64] + e[3][(i + 42) % 64] + e[8][(i + 42) % 64];
-		//b[(2 * 64) + i] = hh[3][i] + e[7][(i + 21) % 64] + d[3][(i + 11) % 64];
-		//b[(3 * 64) + i] = hh[6][i] + d[3][(i + 48) % 64] + e[8][(i + 20) % 64] + d[3][(i + 47) % 64] + RC[(i + 19) % 64] + e[3][(i + 20) % 64];
-		//b[(4 * 64) + i] = hh[7][i] + d[3][(i + 58) % 64] + d[3][(i + 57) % 64] + e[6][(i + 2) % 64];
-		//b[(5 * 64) + i] = 1 + RC[(i + 45) % 64] + d[3][(i + 9) % 64] + e[7][(i + 44) % 64];
 	}
 
 
@@ -278,7 +282,19 @@ void get_preimage(string input_path, string output_path)
 	/*****************************************************/
 
 	GF2 det;
-	solve(det, A, x, b); //solving the system of linear equation
+	DWORD Start, End;
+
+		Start = timeGetTime();
+	for (int i = 0; i < 1000; i++)
+	{
+		solve(det, A, x, b); //solving the system of linear equation
+	}
+		End = timeGetTime();
+	
+	cout << "Cost of solving the system of linear equation: " << (double)(End - Start)/1000 << "ms"<<endl;
+
+
+	//这里运行你的程序代码
 
 	///*****************************************************/
 	////Extracting the solution of the system of linear equation
@@ -315,28 +331,21 @@ void get_preimage(string input_path, string output_path)
 
 
 
-
-
-
-	//vector<vec_GF2> m_d, m_e;
-	//vector<vec_GF2> m_d;
-	//int m_d_bitsize = 1088;
-	//m_d = get192zero(1088,hh);
-	//m_d = get_test_input(1088, hh);
-	//m_e = get_test_input_2(1088, hh);
-
-
+#ifdef DEBUG
 	cout << "The preimage is stored in the file named \"preimage\".\n";
+#endif // DEBUG
+
 	ofstream outfile;
 	outfile.open(output_path, ios::out);
 	if (!outfile) {
 		cout << "Cannot open file \n";
 		exit(1);
 	}
+#ifdef DEBUG
 	debug_print_lane(m_d, 'd', 64, 17);
+#endif // DEBUG
+
 	output_print_lane(m_d, 'd', 64, 17, outfile);
-	//debug_print_lane(m_e, 'e', 64, 17);
-	//output_print_lane(m_e, 'e', 64, 17, outfile);
 
 
 	outfile.close();
@@ -358,9 +367,6 @@ vector<vec_GF2> get192zero(int bitsize, vector<vec_GF2>& hh)
 		e[5][i] = hh[0][i];
 		e[10][i] = hh[0][i];
 		e[15][i] = hh[0][i];
-		//e[1][i] = e[6][i] = e[11][i] = e[16][i] = 0;  // e_1  e_6 e_11 e_16   
-		//e[2][i] = e[7][i] = e[12][i] = 0;
-		//e[3][i] = e[8][i] = e[13][i] = 0;
 	}
 
 	//for padding
@@ -414,37 +420,6 @@ vector<vec_GF2> get_test_input_2(int bitsize, vector<vec_GF2>& hh)
 		e.push_back(vec_GF2());
 		e[i].SetLength(64);
 	}
-
-
-	//for (int i = 0; i < 64; ++i) {
-
-	//}
-
-	//for padding
-
-	//e[1][0] = e[1][63] = e[11][0] = e[9][7] = 1;
-	//e[3][1] = e[10][44] = e[13][44] = e[7][7] = e[8][0] = 1;
-
-
-	//e[1][0] = e[1][64-63] = e[11][0] = e[9][64-7] = 1;
-	//e[3][64-1] = e[10][64-44] = e[13][64-44] = e[7][64-7] = e[8][0] = 1;
-
-	//e[1][0] = e[1][63] = 1;
-	//e[10][20] = e[6][57] = e[9][57] = 1;
-	//e[11][0] = e[13][20] = 1;
-
-
-	//// x=0
-	//e[5][0] = e[10][20] = e[15][21] = 1;
-	//// x=1
-	//e[1][44] = e[6][0] = e[6][14] = e[6][44] = 1;
-	//e[11][0] = e[11][63] = 1;
-	//// x=2
-	//// pass
-	//// x=3
-	//e[8][0] = e[13][20] = e[13][21] = 1;
-	//// x=4
-	//e[9][14] = 1;
 
 
 	// x=0

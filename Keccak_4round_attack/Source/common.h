@@ -13,7 +13,7 @@
 #define se second
 
 // #define DEBUG
-#define ReducedRound 3
+#define ReducedRound 4
 #define KeccakReferences
 #define maxNrRounds 24
 #define nrLanes 25
@@ -21,7 +21,7 @@
 #define KeccakP1600_stateSizeInBytes    200
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define ROL64(a, offset) ((offset != 0) ? ((((tKeccakLane)a) << offset) ^ (((tKeccakLane)a) >> (64-offset))) : a)
-#define TARGET_LEN 16
+#define TARGET_LEN 18
 
 typedef unsigned char UINT8;
 typedef unsigned long long UINT64;

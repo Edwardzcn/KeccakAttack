@@ -324,23 +324,29 @@ void test_preimage(string input_path) {
 		string se;
 		//	sd = vecGF2tostring(d[i],64);
 		getline(infile, se);
+#ifdef DEBUG
 		cout << "Readline [" << i << "]: " << se << endl;
-		//	cout << "sd=" << sd << endl << "se=" << se << endl;
-		//	// 是否需要反转
-		//	reverse(sd.begin(), sd.end());
+#endif // DEBUG
+
 		reverse(se.begin(), se.end());
 		message_block[i] = stringtoull(se);
 	}
 
+#ifdef DEBUG
 	cout << "***************PRINT MESSAGE*************\n";
 	rep(i, 0, MESSAGE_BITLEN / 64) {
 		printf("i=%d  %016llX\n", i, message_block[i]);
 	}
+#endif // DEBUG
+
 
 	unsigned int outputBitLen = 256;
 	UINT64* hash_1 = (UINT64*)calloc(outputBitLen / 64 + 1, sizeof(UINT64));
 	inputBitLen1 -= 2;
+#ifdef DEBUG
 	printf("inputBitlen=%d\n", inputBitLen1);
+#endif // DEBUG
+
 
 	Keccak(reducedRound, 1088, 512, message_block, inputBitLen1, hash_1, outputBitLen, 0);
 

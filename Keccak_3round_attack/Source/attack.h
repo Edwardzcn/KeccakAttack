@@ -10,6 +10,9 @@
 #include "operation.h"
 
 
+
+
+
 #define INF 0x3f3f3f3f
 #define HASH_BIT_SIZE 256
 
@@ -24,7 +27,6 @@ void debug_print_lane(vector<vec_GF2> &g, char vec_name, int bit_length, int lan
 
 string vecGF2tostring(vec_GF2 g, int bit_length);
 UINT64 stringtoull(string str_64);
-
 
 void get_preimage(string input_path, string output_path);
 
