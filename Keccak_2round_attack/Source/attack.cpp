@@ -284,14 +284,18 @@ void get_preimage(string input_path, string output_path)
 	GF2 det;
 	DWORD Start, End;
 
-		Start = timeGetTime();
+#ifdef TEST_AVG
+	Start = timeGetTime();
 	for (int i = 0; i < 1000; i++)
 	{
 		solve(det, A, x, b); //solving the system of linear equation
 	}
-		End = timeGetTime();
-	
-	cout << "Cost of solving the system of linear equation: " << (double)(End - Start)/1000 << "ms"<<endl;
+	End = timeGetTime();
+	cout << "Cost of solving the system of linear equation: " << (double)(End - Start) / 1000 << "ms" << endl;
+#else
+	solve(det, A, x, b); //solving the system of linear equation
+#endif // TEST_AVG
+
 
 
 	//这里运行你的程序代码

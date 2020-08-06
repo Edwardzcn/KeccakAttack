@@ -83,13 +83,10 @@ void iota_inverse(tKeccakLane* A, unsigned int indexRound) {
 #include <iostream>
 
 void iota_inverse(vector<vec_GF2>& A, unsigned int indexRound, tKeccakLane* rc) {
+	// 根据轮次做iota逆运算
 	tKeccakLane value = rc[indexRound];
 	for (int i = 0; i < 64; ++i) {
 		if (value & 1LL << i) {
-#ifdef DEBUG
-			cout << "# i=" << i << endl;
-#endif // DEBUG
-
 			A[0][i] = A[0][i] + 1;
 		}
 	}

@@ -12,7 +12,8 @@
 #define fi first
 #define se second
 
-// #define DEBUG
+#define DEBUG
+//#define TEST_AVG
 #define ReducedRound 3
 #define KeccakReferences
 #define maxNrRounds 24

@@ -439,9 +439,6 @@ void test_preimage_random(int pid, independent_bits_engine<default_random_engine
 	// Random 64 engine
 	rep(i, 0, MESSAGE_BITLEN / 64) {
 		message_block[i] = input_engine();
-#ifdef DEBUG
-		cout << "Create Message Line [" << i << "]: " << se << endl;
-#endif // DEBUG
 	}
 
 #ifdef DEBUG
@@ -478,9 +475,7 @@ void test_preimage_random(int pid, independent_bits_engine<default_random_engine
 			cout << "Cannot open file \n";
 			exit(1);
 		}
-#ifdef DEBUG
-		debug_print_lane(m_d, 'd', 64, 17);
-#endif // DEBUG
+
 
 		//output_print_lane(m_d, 'd', 64, 17, outfile);
 		outfile << "hashPrefixLen=" << get_len << "    inputBitLen= " << inputBitLen1 << endl;
