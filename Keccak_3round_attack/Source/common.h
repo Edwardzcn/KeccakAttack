@@ -24,6 +24,7 @@
 #define ROL64(a, offset) ((offset != 0) ? ((((tKeccakLane)a) << offset) ^ (((tKeccakLane)a) >> (64-offset))) : a)
 #define TARGET_LEN 16
 
+
 typedef unsigned char UINT8;
 typedef unsigned long long UINT64;
 typedef UINT64 tKeccakLane;

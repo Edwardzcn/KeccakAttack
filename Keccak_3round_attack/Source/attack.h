@@ -35,4 +35,10 @@ vector<vec_GF2> get192zero(int bitsize, vector<vec_GF2>& hh);
 vector<vec_GF2> get_test_input(int bitsize, vector<vec_GF2>& hh);
 vector<vec_GF2> get_test_input_2(int bitsize, vector<vec_GF2>& hh);
 
+const int maxn = 400;
+
+
+void gaussian_init(int a[maxn][maxn],int x[maxn],int &equ,int &var);
+int gaussian_solve(int a[maxn][maxn], int x[maxn],int RC[5][maxn],int free_x[maxn],int &equ,int &var,int &free_num);
+
 
