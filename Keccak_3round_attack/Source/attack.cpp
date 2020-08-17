@@ -331,8 +331,7 @@ void get_preimage(string input_path, string output_path)
 		}
 		cout << endl;
 	}
-	int temp;
-	cin >> temp;
+
 
 	///*****************************************************/
 	////Extracting the solution of the system of linear equation
